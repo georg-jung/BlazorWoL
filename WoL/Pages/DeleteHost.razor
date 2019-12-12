@@ -1,4 +1,4 @@
-﻿@page "/DeleteHost/{Id:int}"
+@page "/DeleteHost/{Id:int}"
 
 @using WoL.Data
 @using WoL.Models
@@ -41,8 +41,19 @@
         </dl>
 
         <div>
-            <button class="btn btn-danger" @onclick="Delete">Delete</button> |
-            <a href="">
+
+                @if (Deleting)
+                {
+                    <button class="btn btn-danger" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Deleting...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-danger" @onclick="Delete">Delete</button>
+                } |
+                <a href="">
                 Back to List
             </a>
         </div>
@@ -54,6 +65,7 @@
     public int Id { get; set; }
 
     Host model;
+    bool Deleting = false;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -62,6 +74,7 @@
 
     private async Task Delete()
     {
+        Deleting = true;
         await HostService.Delete(Id);
         NavigationManager.NavigateTo("/");
     }

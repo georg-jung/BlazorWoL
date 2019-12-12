@@ -38,9 +38,19 @@
                 <InputText @bind-Value="model.MacAddress" class="form-control" />
                 <span asp-validation-for="Host.MacAddress" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <div class="form-group">
+                    @if (Creating)
+                    {
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Creating...
+                        </button>
+                    }
+                    else
+                    {
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    }
+                </div>
         </EditForm>
     </div>
 </div>
@@ -54,6 +64,7 @@
 @code {
     AddHostViewModel model = new AddHostViewModel();
     string Alert = null;
+    bool Creating = false;
 
     private Host GetMacHost()
     {
@@ -86,6 +97,7 @@
 
     private async Task HandleValidSubmit(EditContext context)
     {
+        Creating = true;
         Host host;
         try
         {
