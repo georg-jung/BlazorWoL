@@ -3,13 +3,20 @@
 @switch (Status)
 {
     case HostViewModel.HostStatus.Loading:
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        if (SpinnerIfLoading)
+        {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        }
+        else
+        {
+            @:&nbsp;
+        }
         break;
     case HostViewModel.HostStatus.Online:
         <span class="badge badge-success">Online</span>
         break;
     case HostViewModel.HostStatus.Unreachable:
-        <span class="badge badge-success">Offline</span>
+        <span class="badge badge-danger">Offline</span>
         break;
     case HostViewModel.HostStatus.NoHostname:
         <span>n/a</span>
@@ -22,4 +29,7 @@
 @code {
     [Parameter]
     public HostViewModel.HostStatus Status { get; set; }
+
+    [Parameter]
+    public bool SpinnerIfLoading { get; set; } = true;
 }
