@@ -42,6 +42,9 @@ namespace WoL.Data
             when (dbue.InnerException is SqlException sqlEx &&
                   (sqlEx.Number == 2601 || sqlEx.Number == 2627))
             {
+                // otherwise this host would be added again when further using the same DbContext
+                context.Entry(host).State = EntityState.Detached;
+
                 var msg = sqlEx.Message;
                 var duplVal = parseDuplicateValue.Match(msg).Groups[1].Value;
                 var idxName = parseIndexName.Match(msg).Groups[1].Value;
