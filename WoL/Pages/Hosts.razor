@@ -28,8 +28,8 @@
                             Status
                         </a>
                     </th>
-                    <th>MAC</th>
-                    <th>Hostname</th>
+                    <th class="d-none d-sm-table-cell">MAC</th>
+                    <th class="d-none d-sm-table-cell">Hostname</th>
                     <th></th>
                 </tr>
             </thead>
@@ -43,11 +43,11 @@
                                 <HostStatus Status="@host.Status" />
                             </a>
                         </td>
-                        <td>@host.MacAddress</td>
-                        <td>@host.Hostname</td>
+                        <td class="d-none d-sm-table-cell">@host.MacAddress</td>
+                        <td class="d-none d-sm-table-cell">@host.Hostname</td>
                         <td>
-                            <a href="/Wake/@host.Id">Wake</a> |
-                            <a href="/DeleteHost/@host.Id">Delete</a>
+                            <a href="/Wake/@host.Id">Wake</a><span class="d-none d-sm-inline">&nbsp;| </span>
+                            <a class="d-none d-sm-inline" href="/DeleteHost/@host.Id">Delete</a>
                         </td>
                     </tr>
                 }
