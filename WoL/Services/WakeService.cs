@@ -8,7 +8,7 @@ namespace WoL.Services
 {
     public class WakeService : IWakeService
     {
-        public Task WakeAsync(byte[] mac)
+        public Task Wake(byte[] mac)
         {
             return IPAddress.Broadcast.SendWolAsync(mac, 40000);
         }

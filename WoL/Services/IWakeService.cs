@@ -4,6 +4,6 @@ namespace WoL.Services
 {
     public interface IWakeService
     {
-        Task WakeAsync(byte[] mac);
+        Task Wake(byte[] mac);
     }
 }
