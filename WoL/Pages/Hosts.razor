@@ -4,8 +4,7 @@
 @using WoL.Models.ViewModels
 @using WoL.Services
 @using WoL.Extensions
-@using System.Collections.Concurrent
-@using Microsoft.AspNetCore.Components.Rendering
+@using WoL.Components
 @inject IHostService HostService
 @inject IPingService  PingService
 
@@ -41,24 +40,7 @@
                         <td>@host.Caption</td>
                         <td>
                             <a href="#" @onclick="@(async () => await RePing(host))" @onclick:preventDefault="true">
-                                @switch (host.Status)
-                                {
-                                    case HostViewModel.HostStatus.Loading:
-                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                        break;
-                                    case HostViewModel.HostStatus.Online:
-                                        <span class="badge badge-success">Online</span>
-                                        break;
-                                    case HostViewModel.HostStatus.Unreachable:
-                                        <span class="badge badge-success">Offline</span>
-                                        break;
-                                    case HostViewModel.HostStatus.NoHostname:
-                                        <span>n/a</span>
-                                        break;
-                                    case HostViewModel.HostStatus.HostnameInvalid:
-                                        <span class="text-danger">Invalid hostname</span>
-                                        break;
-                                }
+                                <HostStatus Status="@host.Status" />
                             </a>
                         </td>
                         <td>@host.MacAddress</td>

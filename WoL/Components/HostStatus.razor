@@ -1,0 +1,25 @@
+﻿@using WoL.Models.ViewModels
+
+@switch (Status)
+{
+    case HostViewModel.HostStatus.Loading:
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        break;
+    case HostViewModel.HostStatus.Online:
+        <span class="badge badge-success">Online</span>
+        break;
+    case HostViewModel.HostStatus.Unreachable:
+        <span class="badge badge-success">Offline</span>
+        break;
+    case HostViewModel.HostStatus.NoHostname:
+        <span>n/a</span>
+        break;
+    case HostViewModel.HostStatus.HostnameInvalid:
+        <span class="text-danger">Invalid hostname</span>
+        break;
+}
+
+@code {
+    [Parameter]
+    public HostViewModel.HostStatus Status { get; set; }
+}
