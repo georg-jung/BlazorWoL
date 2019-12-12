@@ -162,9 +162,9 @@
 
     private async Task PingAndSetStatus()
     {
-        var timeout = 1500;
+        var timeout = 2500;
         LastStatusCheck = DateTime.Now;
-        var res = await PingService.IsReachable(host.Hostname, timeout);
+        var res = await PingService.IsReachable(host.Hostname, TimeSpan.FromMilliseconds(timeout));
         model.Status = res.ToHostStatus();
         PingTries++;
         base.StateHasChanged();

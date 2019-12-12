@@ -1,12 +1,13 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WoL.Services
 {
     public interface IPingService
     {
-        Task<bool> IsReachable(IPAddress ip, int timeout);
-        Task<PingResult> IsReachable(string hostname, int timeout);
+        Task<bool> IsReachable(IPAddress ip, TimeSpan timeout);
+        Task<PingResult> IsReachable(string hostname, TimeSpan timeout);
 
         public enum PingResult
         {

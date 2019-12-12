@@ -36,7 +36,9 @@ namespace WoL
             services.AddServerSideBlazor();
             services.AddTransient<IHostService, HostService>();
             services.AddTransient<IWakeService, WakeService>();
-            services.AddTransient<IPingService, PingService>();
+            services.AddTransient<IcmpPingService>();
+            services.AddTransient<RdpPortPingService>();
+            services.AddTransient<IPingService, CompositePingService>();
             services.AddTransient<IAddressLookupService, AddressLookupService>();
         }
 

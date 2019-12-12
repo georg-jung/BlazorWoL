@@ -101,8 +101,8 @@
 
     private async Task PingAndSetStatus(HostViewModel h)
     {
-        var timeout = 1000;
-        var res = await PingService.IsReachable(h.Hostname, timeout);
+        var timeout = 2500;
+        var res = await PingService.IsReachable(h.Hostname, TimeSpan.FromMilliseconds(timeout));
         h.Status = res.ToHostStatus();
         base.StateHasChanged();
     }

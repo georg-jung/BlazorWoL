@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using static WoL.Services.IPingService;
 
 namespace WoL.Services
 {
-    public class PingService : IPingService
+    public abstract class DnsPingServiceBase : IPingService
     {
-        private IAddressLookupService addressLookupService;
+        private readonly IAddressLookupService addressLookupService;
 
-        public PingService(IAddressLookupService addressLookupService)
+        public DnsPingServiceBase(IAddressLookupService addressLookupService)
         {
             this.addressLookupService = addressLookupService;
         }
 
-        public async Task<PingResult> IsReachable(string hostname, int timeout)
+        public async Task<IPingService.PingResult> IsReachable(string hostname, TimeSpan timeout)
         {
             IPAddress ip;
             try
@@ -31,11 +30,6 @@ namespace WoL.Services
             return await IsReachable(ip, timeout).ConfigureAwait(false) ? PingResult.Success : PingResult.Unreachable;
         }
 
-        public async Task<bool> IsReachable(IPAddress ip, int timeout)
-        {
-            using var ping = new Ping();
-            var reply = await ping.SendPingAsync(ip, timeout).ConfigureAwait(false);
-            return reply.Status == IPStatus.Success;
-        }
+        public abstract Task<bool> IsReachable(IPAddress ip, TimeSpan timeout);
     }
 }
