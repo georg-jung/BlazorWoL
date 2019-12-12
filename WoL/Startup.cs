@@ -35,6 +35,8 @@ namespace WoL
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddTransient<IHostService, HostService>();
+            services.AddTransient<IWakeService, WakeService>();
+            services.AddTransient<IAddressLookupService, AddressLookupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
