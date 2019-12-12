@@ -9,41 +9,55 @@
 @inject IWakeService WakeService
 @inject NavigationManager NavigationManager
 
-<h3>Wake</h3>
+<div class="container">
+    <h2>Wake</h2>
 
-<hr />
+    <hr />
 
-@if (host != null)
-{
-    <div class="col-lg-8">
-        <dl class="row">
-            <dt class="col-sm-2">
-                Title
-            </dt>
-            <dd class="col-sm-10">
-                @host.Caption
-            </dd>
-            <dt class="col-sm-2">
-                Mac Address
-            </dt>
-            <dd class="col-sm-10">
-                @host.GetMacString()
-            </dd>
-            <dt class="col-sm-2">
-                Hostname
-            </dt>
-            <dd class="col-sm-10">
-                @host.Hostname
-            </dd>
-        </dl>
-
-        <div>
-            <p>
-                @status
-            </p>
+    @if (!string.IsNullOrEmpty(Alert))
+    {
+        <div class="alert @AlertClass">
+            @if (AlertSpinner)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            @Alert
         </div>
-    </div>
-}
+    }
+
+
+    @if (host != null)
+    {
+        <div class="row">
+            <div class="col-lg-8 col-xl-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        Title
+                    </dt>
+                    <dd class="col-sm-8">
+                        @host.Caption
+                    </dd>
+                    <dt class="col-sm-4">
+                        Mac Address
+                    </dt>
+                    <dd class="col-sm-8">
+                        @host.GetMacString()
+                    </dd>
+                    <dt class="col-sm-4">
+                        Hostname
+                    </dt>
+                    <dd class="col-sm-8">
+                        @host.Hostname
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    }
+
+    <a href="">
+        Back to List
+    </a>
+</div>
 
 @code {
     [Parameter]
@@ -51,14 +65,36 @@
 
     Host host;
 
-    string status = "";
+    string Alert = null;
+    string AlertClass = null;
+    bool AlertSpinner = false;
+
+    private string Info
+    {
+        set
+        {
+            AlertClass = "alert-info";
+            Alert = value;
+        }
+    }
+
+    private string Success
+    {
+        set
+        {
+            AlertClass = "alert-success";
+            Alert = value;
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {
         host = await HostService.Find(Id);
-        status = "Sending wake-up packet...";
+        AlertSpinner = true;
+        Info = "Sending wake-up packet...";
         await WakeService.WakeAsync(host.MacAddress);
-        status = "Wake-up packet sent.";
+        AlertSpinner = false;
+        Success = "Wake-up packet sent.";
     }
 
     private async Task Delete()
