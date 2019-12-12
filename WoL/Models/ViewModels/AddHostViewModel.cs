@@ -12,13 +12,16 @@ namespace WoL.Models.ViewModels
         public int Id { get; set; }
 
         [StringLength(255)]
+        [Display(Name = "Hostname")]
         public string Hostname { get; set; }
 
         [StringLength(255)]
         [Required]
+        [Display(Name = "Title")]
         public string Caption { get; set; }
 
         [StringLength(17, MinimumLength = 17)]
+        [Display(Name = "Mac address")]
         public string MacAddress { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
