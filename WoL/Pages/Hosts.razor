@@ -103,13 +103,7 @@
     {
         var timeout = 1000;
         var res = await PingService.IsReachable(h.Hostname, timeout);
-        h.Status = res switch
-        {
-            IPingService.PingResult.Success => HostViewModel.HostStatus.Online,
-            IPingService.PingResult.Unreachable => HostViewModel.HostStatus.Unreachable,
-            IPingService.PingResult.HostNotFound => HostViewModel.HostStatus.HostnameInvalid,
-            _ => throw new NotImplementedException()
-        };
+        h.Status = res.ToHostStatus();
         base.StateHasChanged();
     }
 }

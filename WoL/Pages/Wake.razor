@@ -5,69 +5,110 @@
 @using WoL.Models.ViewModels
 @using WoL.Services
 @using WoL.Extensions
+@using WoL.Components
 @inject IHostService HostService
 @inject IWakeService WakeService
-@inject NavigationManager NavigationManager
+@inject IPingService  PingService
 
-<div class="container">
-    <h2>Wake</h2>
+    <div class="container">
+        <h2>Wake</h2>
 
-    <hr />
+        <hr />
 
-    @if (!string.IsNullOrEmpty(Alert))
-    {
-        <div class="alert @AlertClass">
-            @if (AlertSpinner)
-            {
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            }
-            @Alert
-        </div>
-    }
-
-
-    @if (host != null)
-    {
-        <div class="row">
-            <div class="col-lg-8 col-xl-6">
-                <dl class="row">
-                    <dt class="col-sm-4">
-                        Title
-                    </dt>
-                    <dd class="col-sm-8">
-                        @host.Caption
-                    </dd>
-                    <dt class="col-sm-4">
-                        Mac Address
-                    </dt>
-                    <dd class="col-sm-8">
-                        @host.GetMacString()
-                    </dd>
-                    <dt class="col-sm-4">
-                        Hostname
-                    </dt>
-                    <dd class="col-sm-8">
-                        @host.Hostname
-                    </dd>
-                </dl>
+        @if (!string.IsNullOrEmpty(Alert))
+        {
+            <div class="alert @AlertClass">
+                @if (AlertSpinner)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                }
+                @Alert
             </div>
-        </div>
-    }
+        }
 
-    <a href="">
-        Back to List
-    </a>
-</div>
+
+        @if (model != null)
+        {
+            <div class="row">
+                <div class="col-lg-8 col-xl-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            Title
+                        </dt>
+                        <dd class="col-sm-8">
+                            @model.Caption
+                        </dd>
+                        <dt class="col-sm-4">
+                            Mac Address
+                        </dt>
+                        <dd class="col-sm-8">
+                            @model.MacAddress
+                        </dd>
+                        <dt class="col-sm-4">
+                            Hostname
+                        </dt>
+                        <dd class="col-sm-8">
+                            @model.Hostname
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+
+            <h4 class="mt-4">
+                Host Status
+            </h4>
+            @if (IsCheckingStatus)
+            {
+                <span class="spinner-border text-primary mt-2 mb-3" style="font-size: 0.8rem;" role="status" aria-hidden="true"></span>
+            }
+            <div class="row">
+                <div class="col-lg-8 col-xl-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            Status
+                        </dt>
+                        <dd class="col-sm-8">
+                            <HostStatus Status="@model.Status" SpinnerIfLoading="false" />
+                        </dd>
+                        <dt class="col-sm-4">
+                            Last Checked
+                        </dt>
+                        <dd class="col-sm-8">
+                            @(LastStatusCheck?.ToString("HH:mm:ss") ?? "-")
+                        </dd>
+                        <dt class="col-sm-4">
+                            Tries Count
+                        </dt>
+                        <dd class="col-sm-8">
+                            @PingTries
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        }
+
+        <a href="">
+            Back to List
+        </a>
+    </div>
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
     Host host;
+    HostViewModel model;
 
-    string Alert = null;
-    string AlertClass = null;
-    bool AlertSpinner = false;
+    const int MaxPingTries = 400;
+
+    string Alert { get; set; } = null;
+    string AlertClass { get; set; } = null;
+    bool AlertSpinner { get; set; } = false;
+    bool IsCheckingStatus { get; set; } = false;
+    int PingTries { get; set; } = 0;
+    DateTime? LastStatusCheck { get; set; } = null;
+    HostViewModel.HostStatus HostStatus { get; set; }
 
     private string Info
     {
@@ -89,17 +130,43 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        host = await HostService.Find(Id);
-        AlertSpinner = true;
-        Info = "Sending wake-up packet...";
-        await WakeService.WakeAsync(host.MacAddress);
-        AlertSpinner = false;
-        Success = "Wake-up packet sent.";
+        await StartBackgroundWork();
     }
 
-    private async Task Delete()
+    private async Task StartBackgroundWork()
     {
-        await HostService.Delete(Id);
-        NavigationManager.NavigateTo("/");
+        host = await HostService.Find(Id);
+        model = new HostViewModel(host);
+        AlertSpinner = true;
+        Info = "Sending wake-up packet...";
+        await WakeService.Wake(host.MacAddress);
+        AlertSpinner = false;
+        Success = "Wake-up packet sent.";
+        var _ = LoopPinging();
+    }
+
+    private async Task LoopPinging()
+    {
+        int minInterval = 1500;
+        IsCheckingStatus = true;
+        while (PingTries < MaxPingTries && (model.Status == HostViewModel.HostStatus.Unreachable || model.Status == HostViewModel.HostStatus.Loading))
+        {
+            var msecSince = Convert.ToInt32((DateTime.Now - LastStatusCheck)?.TotalMilliseconds ?? minInterval);
+            if (msecSince < minInterval)
+                await Task.Delay(minInterval - msecSince);
+            await PingAndSetStatus();
+        }
+        IsCheckingStatus = false;
+        base.StateHasChanged();
+    }
+
+    private async Task PingAndSetStatus()
+    {
+        var timeout = 1500;
+        LastStatusCheck = DateTime.Now;
+        var res = await PingService.IsReachable(host.Hostname, timeout);
+        model.Status = res.ToHostStatus();
+        PingTries++;
+        base.StateHasChanged();
     }
 }
