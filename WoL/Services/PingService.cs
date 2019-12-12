@@ -19,7 +19,6 @@ namespace WoL.Services
 
         public async Task<PingResult> IsReachable(string hostname, int timeout)
         {
-            await Task.Delay(1000);
             IPAddress ip;
             try
             {
