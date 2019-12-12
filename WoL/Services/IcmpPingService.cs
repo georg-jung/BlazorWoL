@@ -10,8 +10,6 @@ namespace WoL.Services
 {
     public class IcmpPingService : DnsPingServiceBase
     {
-        private IAddressLookupService addressLookupService;
-
         public IcmpPingService(IAddressLookupService addressLookupService) : base(addressLookupService)
         {
         }
