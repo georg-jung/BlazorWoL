@@ -1,0 +1,89 @@
+﻿@page "/AddHost"
+
+@using WoL.Data
+@using WoL.Models
+@using WoL.Models.ViewModels
+@using WoL.Services
+@using WoL.Extensions
+@inject IHostService HostService
+@inject IAddressLookupService AddressService
+@inject NavigationManager NavigationManager
+
+<h3>Add Host</h3>
+
+<hr />
+<div class="row">
+    <div class="col-lg-3">
+        <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Host.Caption" class="control-label">Title</label>
+                <InputText @bind-Value="model.Caption" class="form-control" />
+                <span asp-validation-for="Host.Caption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Host.Hostname" class="control-label">Host name</label>
+                <InputText @bind-Value="model.Hostname" class="form-control" />
+                <span asp-validation-for="Host.Hostname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Host.MacAddress" class="control-label">Mac address</label>
+                <InputText @bind-Value="model.MacAddress" class="form-control" />
+                <span asp-validation-for="Host.MacAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="">
+        Back to List
+    </a>
+</div>
+
+@code {
+    AddHostViewModel model = new AddHostViewModel();
+
+    private Host GetMacHost()
+    {
+        var mac = model.MacAddress.ParseMacAddress();
+        return new Host()
+        {
+            Caption = model.Caption,
+            MacAddress = mac
+        };
+    }
+
+    private async Task<Host> GetHostByName()
+    {
+        (var ip, var name) = await AddressService.GetIpAndName(model.Hostname);
+        var mac = (await AddressService.GetMac(ip)).GetAddressBytes();
+        return new Host()
+        {
+            Caption = model.Caption,
+            Hostname = name,
+            MacAddress = mac
+        };
+    }
+
+    private async Task<Host> GetHost()
+    {
+        if (!string.IsNullOrEmpty(model.MacAddress))
+            return GetMacHost();
+        return await GetHostByName();
+    }
+
+    private async Task HandleValidSubmit(EditContext context)
+    {
+        Host host;
+        host = await GetHost();
+        await HostService.Add(host);
+        NavigationManager.NavigateTo("/");
+    }
+}

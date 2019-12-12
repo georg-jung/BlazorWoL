@@ -1,0 +1,49 @@
+﻿@page "/"
+
+@using WoL.Data
+@using WoL.Models
+@using WoL.Extensions
+@inject IHostService HostService
+
+<h1>Wake-on-LAN</h1>
+
+@if (hosts == null)
+{
+    <p><em>Lade Hosts...</em></p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>MAC</th>
+                <th>Hostname</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var host in hosts)
+            {
+                <tr>
+                    <td>@host.Caption</td>
+                    <td>@host.GetMacString()</td>
+                    <td>@host.Hostname</td>
+                    <td>
+                        <a href="/Wake/@host.Id">Wake</a> |
+                        <a href="/DeleteHost/@host.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Host> hosts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hosts = await HostService.GetAll();
+    }
+}
