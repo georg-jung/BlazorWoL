@@ -30,7 +30,7 @@ This application uses the following techniques and might be suitable as a simple
 ## Getting Started
 
 1. Create a T-SQL database and set-up the applications schema by executing the script [`CreateSchema.sql`](CreateSchema.sql) or alternatively by [using](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#update-the-database) the [`dotnet ef` tool](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
-2. Download and unzip the newest release.
+2. Download and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/download/WoL.zip).
 2. Add an appropriate connection string `DefaultConnection` to `appsettings.json`. See `appsettings.Development.json` for an example.
 3. Run the application by starting `WoL.exe`, open the shown location in a browser (probably `localhost:5000`) and add your first host.
     * You can host the application in IIS and use the hosted version permanently too.
