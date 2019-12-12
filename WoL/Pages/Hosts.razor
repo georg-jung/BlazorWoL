@@ -1,59 +1,133 @@
-@page "/"
+﻿@page "/"
 
 @using WoL.Data
-@using WoL.Models
+@using WoL.Models.ViewModels
+@using WoL.Services
 @using WoL.Extensions
+@using System.Collections.Concurrent
+@using Microsoft.AspNetCore.Components.Rendering
 @inject IHostService HostService
+@inject IPingService  PingService
 
 <div class="container">
     <h2>Wake-on-LAN</h2>
 
     <hr />
 
-@if (hosts == null)
-{
-    <p><em>Lade Hosts...</em></p>
-}
-else
-{
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>MAC</th>
-                <th>Hostname</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var host in hosts)
-            {
+    @if (hosts == null)
+    {
+        <p><em>Lade Hosts...</em></p>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td>@host.Caption</td>
-                    <td>@host.GetMacString()</td>
-                    <td>@host.Hostname</td>
-                    <td>
-                        <a href="/Wake/@host.Id">Wake</a> |
-                        <a href="/DeleteHost/@host.Id">Delete</a>
-                    </td>
+                    <th>Title</th>
+                    <th>
+                        <a href="#" @onclick="@RePingAll" @onclick:preventDefault="true">
+                            Status
+                        </a>
+                    </th>
+                    <th>MAC</th>
+                    <th>Hostname</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var host in hosts)
+                {
+                    <tr>
+                        <td>@host.Caption</td>
+                        <td>
+                            <a href="#" @onclick="@(async () => await RePing(host))" @onclick:preventDefault="true">
+                                @switch (host.Status)
+                                {
+                                    case HostViewModel.HostStatus.Loading:
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        break;
+                                    case HostViewModel.HostStatus.Online:
+                                        <span class="badge badge-success">Online</span>
+                                        break;
+                                    case HostViewModel.HostStatus.Unreachable:
+                                        <span class="badge badge-success">Offline</span>
+                                        break;
+                                    case HostViewModel.HostStatus.NoHostname:
+                                        <span>n/a</span>
+                                        break;
+                                    case HostViewModel.HostStatus.HostnameInvalid:
+                                        <span class="text-danger">Invalid hostname</span>
+                                        break;
+                                }
+                            </a>
+                        </td>
+                        <td>@host.MacAddress</td>
+                        <td>@host.Hostname</td>
+                        <td>
+                            <a href="/Wake/@host.Id">Wake</a> |
+                            <a href="/DeleteHost/@host.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
         @if (hosts.Count == 0)
         {
             <p>
                 Currently, there are no saved hosts. <a href="/AddHost">Click here</a> to add one.
             </p>
         }
-}
+    }
 </div>
 
 @code {
-    private List<Host> hosts;
+    private List<HostViewModel> hosts;
 
     protected override async Task OnInitializedAsync()
     {
-        hosts = await HostService.GetAll();
+        hosts = (await HostService.GetAll()).Select(h => new HostViewModel(h)).ToList();
+
+        var pingable = hosts.Where(CanPing);
+
+        var _ = Task.WhenAll(pingable.Select(h => PingAndSetStatus(h)));
+    }
+
+    private bool CanPing(HostViewModel host) => !string.IsNullOrEmpty(host.Hostname);
+
+    private async Task RePingAll()
+    {
+        var pingable = hosts.Where(CanPing);
+
+        var tasks = new List<Task>();
+        foreach (var host in pingable)
+        {
+            host.Status = HostViewModel.HostStatus.Loading;
+            tasks.Add(PingAndSetStatus(host));
+        }
+        base.StateHasChanged();
+        await Task.WhenAll(tasks);
+    }
+
+    private async Task RePing(HostViewModel h)
+    {
+        if (!CanPing(h))
+            return;
+        h.Status = HostViewModel.HostStatus.Loading;
+        base.StateHasChanged();
+        await PingAndSetStatus(h);
+    }
+
+    private async Task PingAndSetStatus(HostViewModel h)
+    {
+        var timeout = 1000;
+        var res = await PingService.IsReachable(h.Hostname, timeout);
+        h.Status = res switch
+        {
+            IPingService.PingResult.Success => HostViewModel.HostStatus.Online,
+            IPingService.PingResult.Unreachable => HostViewModel.HostStatus.Unreachable,
+            IPingService.PingResult.HostNotFound => HostViewModel.HostStatus.HostnameInvalid,
+            _ => throw new NotImplementedException()
+        };
+        base.StateHasChanged();
     }
 }
