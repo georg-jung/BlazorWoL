@@ -1,4 +1,4 @@
-﻿@page "/AddHost"
+@page "/AddHost"
 
 @using WoL.Data
 @using WoL.Models
@@ -15,6 +15,10 @@
 <div class="row">
     <div class="col-lg-3">
         <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+                @if (!string.IsNullOrEmpty(Alert))
+                {
+                    <div class="alert alert-danger">@Alert</div>
+                }
             <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -49,6 +53,7 @@
 
 @code {
     AddHostViewModel model = new AddHostViewModel();
+    string Alert = null;
 
     private Host GetMacHost()
     {
@@ -82,8 +87,32 @@
     private async Task HandleValidSubmit(EditContext context)
     {
         Host host;
-        host = await GetHost();
-        await HostService.Add(host);
+        try
+        {
+            host = await GetHost();
+        }
+        catch
+        {
+            Alert = "This hostname or it's mac address could not be found.";
+            Creating = false;
+            return;
+        }
+        try
+        {
+            await HostService.Add(host);
+        }
+        catch (IHostService.DuplicateEntryException duplEx)
+        {
+            Alert = $"Creation failed as an entry with {duplEx.Field.ToLower()} '{duplEx.Value}' does already exists.";
+            Creating = false;
+            return;
+        }
+        catch
+        {
+            Alert = "This entry could not be created. Maybe a similar entry which shares some of the entered values does already exist. Please contact the administrator.";
+            Creating = false;
+            return;
+        }
         NavigationManager.NavigateTo("/");
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WoL.Models;
 
@@ -11,5 +13,36 @@ namespace WoL.Data
         Task<Host> Find(int id);
         Task<List<Host>> GetAll();
         Task Update(Host host);
+
+        public class DuplicateEntryException : ArgumentException
+        {
+            public string Field { get; }
+            public string Value { get; }
+
+            public DuplicateEntryException()
+            {
+            }
+
+            public DuplicateEntryException(string message) : base(message)
+            {
+            }
+
+            public DuplicateEntryException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+
+            protected DuplicateEntryException(SerializationInfo info, StreamingContext context) : base(info, context)
+            {
+            }
+
+            private static string CreateMessage(string field, string value) =>
+                $"A host entry with {field} '{value}' does already exist.";
+
+            public DuplicateEntryException(string field, string value, string paramName, Exception innerException) : base(CreateMessage(field, value), paramName, innerException)
+            {
+                Field = field;
+                Value = value;
+            }
+        }
     }
 }
