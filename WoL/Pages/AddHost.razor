@@ -1,4 +1,4 @@
-@page "/AddHost"
+﻿@page "/AddHost"
 
 @using WoL.Data
 @using WoL.Models
@@ -9,35 +9,44 @@
 @inject IAddressLookupService AddressService
 @inject NavigationManager NavigationManager
 
-<h3>Add Host</h3>
+<div class="container">
+    <h2>Add Host</h2>
 
-<hr />
-<div class="row">
-    <div class="col-lg-3">
-        <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+    <hr />
+
+    <p>
+        Add a new host by entering a caption and <em>either</em> a hostname/IP address <em>or</em> a mac address (but not both). If you enter a hostname/IP address the mac address will be determined automatically and the entered value will be replaced by the one found using DNS.
+    </p>
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+            <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
                 @if (!string.IsNullOrEmpty(Alert))
                 {
                     <div class="alert alert-danger">@Alert</div>
                 }
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Host.Caption" class="control-label">Title</label>
-                <InputText @bind-Value="model.Caption" class="form-control" />
-                <span asp-validation-for="Host.Caption" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Host.Hostname" class="control-label">Host name</label>
-                <InputText @bind-Value="model.Hostname" class="form-control" />
-                <span asp-validation-for="Host.Hostname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Host.MacAddress" class="control-label">Mac address</label>
-                <InputText @bind-Value="model.MacAddress" class="form-control" />
-                <span asp-validation-for="Host.MacAddress" class="text-danger"></span>
-            </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Host.Caption" class="control-label">Title</label>
+                    <InputText @bind-Value="model.Caption" class="form-control" />
+                    <span asp-validation-for="Host.Caption" class="text-danger"></span>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="Host.Hostname" class="control-label">Hostname/IP address</label>
+                    <InputText @bind-Value="model.Hostname" class="form-control" />
+                    <span asp-validation-for="Host.Hostname" class="text-danger"></span>
+                </div>
+                <p>
+                    <strong><em>- or -</em></strong>
+                </p>
+                <div class="form-group">
+                    <label asp-for="Host.MacAddress" class="control-label">Mac address</label>
+                    <InputText @bind-Value="model.MacAddress" class="form-control" />
+                    <span asp-validation-for="Host.MacAddress" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     @if (Creating)
                     {
@@ -51,14 +60,15 @@
                         <input type="submit" value="Create" class="btn btn-primary" />
                     }
                 </div>
-        </EditForm>
+            </EditForm>
+        </div>
     </div>
-</div>
 
-<div>
-    <a href="">
-        Back to List
-    </a>
+    <div>
+        <a href="">
+            Back to List
+        </a>
+    </div>
 </div>
 
 @code {
