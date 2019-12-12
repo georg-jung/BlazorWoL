@@ -1,11 +1,14 @@
-﻿@page "/"
+@page "/"
 
 @using WoL.Data
 @using WoL.Models
 @using WoL.Extensions
 @inject IHostService HostService
 
-<h1>Wake-on-LAN</h1>
+<div class="container">
+    <h2>Wake-on-LAN</h2>
+
+    <hr />
 
 @if (hosts == null)
 {
@@ -37,7 +40,14 @@ else
             }
         </tbody>
     </table>
+        @if (hosts.Count == 0)
+        {
+            <p>
+                Currently, there are no saved hosts. <a href="/AddHost">Click here</a> to add one.
+            </p>
+        }
 }
+</div>
 
 @code {
     private List<Host> hosts;
