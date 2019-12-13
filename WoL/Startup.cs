@@ -15,6 +15,7 @@ using WoL.Services;
 
 namespace WoL
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Literale nicht als lokalisierte Parameter übergeben", Justification = "We're fine with english texts regarding configuration and startup.")]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -60,8 +61,10 @@ namespace WoL
             services.AddTransient<IAddressLookupService, AddressLookupService>();
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Argumente von öffentlichen Methoden validieren", Justification = "Called by the runtime, app will not be null")]
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
