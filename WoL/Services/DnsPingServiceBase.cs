@@ -32,7 +32,7 @@ namespace WoL.Services
             catch (Exception ex)
 #pragma warning restore CA1031 // Keine allgemeinen Ausnahmetypen abfangen
             {
-                logger.LogInformation(ex, $"Exception during {nameof(IAddressLookupService)}.{nameof(IAddressLookupService.GetIpAndName)}");
+                logger.LogDebug(ex, $"Exception during {nameof(IAddressLookupService)}.{nameof(IAddressLookupService.GetIpAndName)}");
                 return PingResult.HostNotFound;
             }
             return await IsReachable(ip, timeout).ConfigureAwait(false) ? PingResult.Success : PingResult.Unreachable;

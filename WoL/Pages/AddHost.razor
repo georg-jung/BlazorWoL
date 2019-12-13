@@ -115,9 +115,16 @@
         {
             host = await GetHost();
         }
+        catch (DllNotFoundException ex)
+        {
+            L.LogInformation(ex, $"DllNotFound during name resolution or determination of mac address. Page: {nameof(AddHost)}");
+            Alert = "This operation is not supported on the operating system this application is running on. Adding hosts by hostname is currently not supported on linux due to the lack of an apropriate ARP API.";
+            Creating = false;
+            return;
+        }
         catch (Exception ex)
         {
-            L.LogInformation(ex, $"Exception during name resolution or determination of mac address. Page: {nameof(AddHost)}");
+            L.LogDebug(ex, $"Exception during name resolution or determination of mac address. Page: {nameof(AddHost)}");
             Alert = "This hostname or it's mac address could not be found.";
             Creating = false;
             return;
