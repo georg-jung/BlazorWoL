@@ -49,4 +49,4 @@ You can add the application in IIS for more serious hosting. You can set up T-SQ
 
 ## Known Limitations
 
-* Adding hosts by hostname is currently impossible on linux, as the ARP API is windows specific.
+* Adding hosts by hostname is currently impossible on platforms except Windows and Linux, as there is no appropriate ARP API.

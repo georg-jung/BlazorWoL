@@ -17,9 +17,7 @@ namespace WoL.Services
 
         public async Task<PhysicalAddress> GetMac(IPAddress ip)
         {
-            var res = await ArpRequest.SendAsync(ip).ConfigureAwait(false);
-            if (res.Exception != null) throw res.Exception;
-            return res.Address;
+            return await ArpLookup.Arp.LookupAsync(ip).ConfigureAwait(false);
         }
     }
 }
