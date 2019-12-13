@@ -36,6 +36,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
+    modifyOutputPath: false
     publishWebProjects: true
     arguments: '-c Release --output $(Build.ArtifactStagingDirectory)/fdd'
 
@@ -49,6 +50,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
+    modifyOutputPath: false
     publishWebProjects: true
     arguments: '-c Release -r win-x86 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
 
@@ -62,6 +64,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
+    modifyOutputPath: false
     publishWebProjects: true
     arguments: '-c Release -r win-arm /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
 
@@ -75,6 +78,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
+    modifyOutputPath: false
     publishWebProjects: true
     arguments: '-c Release -r linux-x64 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
 
