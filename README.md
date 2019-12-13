@@ -37,6 +37,7 @@ This application uses the following techniques and might be suitable as a simple
   * Supports T-SQL and SQLite, selection by connection string in `appsettings.json`
 * Dependency Injection using [`Microsoft.Extensions.DependencyInjection`](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/)
 * Continuous Integration using Azure Pipelines.
+* Dependency updates are partly automated using [Dependabot](https://dependabot.com/).
 
 ## Getting Started
 
