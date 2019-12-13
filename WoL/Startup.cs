@@ -84,6 +84,22 @@ namespace WoL
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            if (Configuration.GetValue<bool>("AutoUpdateDatabase", false))
+            {
+                UpdateDatabase(app);
+            }
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            // this could be async but configuration of the dependencies isn't
+            // https://stackoverflow.com/a/37573402/1200847
+            context.Database.Migrate();
         }
     }
 }
