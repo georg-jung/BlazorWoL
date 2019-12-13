@@ -2,7 +2,7 @@
 
 [![Build Status](https://dev.azure.com/georg-jung/BlazorWoL/_apis/build/status/georg-jung.BlazorWoL?branchName=master)](https://dev.azure.com/georg-jung/BlazorWoL/_build/latest?definitionId=1&branchName=master)
 
-This is a [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) app for your network, written in server-side blazor. I developed it for internal use at my workplace and because I wanted to build a small, limited-scope but fully-working and done-right blazor app. I used this to explore the features of the new blazor framework. Feel free to improve/fork/PR this if you think I could have done anything better.
+This is a [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) app for your network, written in server-side blazor. I developed it for internal use at my workplace and because I wanted to build a small, limited-scope but fully-working and done-right blazor app. [Getting started](#getting-started) is as easy as downloading and running. Feel free to improve/fork/PR this if you think I could have done anything better.
 
 ## Features
 
@@ -23,14 +23,15 @@ This application uses the following techniques and might be suitable as a simple
   * UI-Server-interaction which would typically require AJAX/writing JavaScript. See the `Wake` page and the *Status* column of the index page.
 * .Net Core 3.1
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) Code First
-  * Migrations
+  * Automatic Migrations
+  * Supports T-SQL and SQLite, selection by connection string in `appsettings.json`
 * Dependency Injection using [`Microsoft.Extensions.DependencyInjection`](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/)
 * Continuous Integration using Azure Pipelines.
 
 ## Getting Started
 
-1. Create a T-SQL database and set-up the applications schema by executing the script [`CreateSchema.sql`](CreateSchema.sql) or alternatively by [using](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#update-the-database) the [`dotnet ef` tool](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
-2. Download and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/download/WoL.zip).
-2. Add an appropriate connection string `DefaultConnection` to `appsettings.json`. See `appsettings.Development.json` for an example.
-3. Run the application by starting `WoL.exe`, open the shown location in a browser (probably `localhost:5000`) and add your first host.
-    * You can host the application in IIS and use the hosted version permanently too.
+1. Download and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/download/WoL.zip).
+2. Run the application by starting `WoL.exe`
+3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
+
+You can add the application in IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](appsettings.json) for details.
