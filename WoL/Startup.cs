@@ -77,7 +77,9 @@ namespace WoL
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            if (Configuration.GetValue<bool>("RequireHttps", true))
+                app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -89,9 +91,7 @@ namespace WoL
             });
 
             if (Configuration.GetValue<bool>("AutoUpdateDatabase", false))
-            {
                 UpdateDatabase(app);
-            }
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)
