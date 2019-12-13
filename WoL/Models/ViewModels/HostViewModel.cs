@@ -14,6 +14,9 @@ namespace WoL.Models.ViewModels
 
         public HostViewModel(Host host)
         {
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
             Id = host.Id;
             Hostname = host.Hostname;
             Caption = host.Caption;

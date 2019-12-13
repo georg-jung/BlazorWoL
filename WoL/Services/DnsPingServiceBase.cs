@@ -23,7 +23,11 @@ namespace WoL.Services
             {
                 (ip, _) = await addressLookupService.GetIpAndName(hostname).ConfigureAwait(false);
             }
+            // could throw at least SocketException, ArgumentException, ArgumentOutOfRangeException, InvalidOperationException, maybe NRE, which would be of interest
+            // we want to catch them all, basically anything that can make the resolution fail
+#pragma warning disable CA1031 // Keine allgemeinen Ausnahmetypen abfangen
             catch
+#pragma warning restore CA1031 // Keine allgemeinen Ausnahmetypen abfangen
             {
                 return PingResult.HostNotFound;
             }

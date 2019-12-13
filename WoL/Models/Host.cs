@@ -19,6 +19,7 @@ namespace WoL.Models
 
         [MaxLength(6)]
         [Required]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Eigenschaften dürfen keine Arrays zurückgeben", Justification = "A mac address intrinsically is a byte[]")]
         public byte[] MacAddress { get; set; }
     }
 }

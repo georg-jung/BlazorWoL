@@ -23,15 +23,15 @@ namespace WoL.Services
             var rdp = rdpPing.IsReachable(ip, timeout);
             var icmp = icmpPing.IsReachable(ip, timeout);
 
-            var finished = await Task.WhenAny(rdp, icmp);
+            var finished = await Task.WhenAny(rdp, icmp).ConfigureAwait(false);
             // if one finishes early and can connect, return early
-            if (await finished)
+            if (await finished.ConfigureAwait(false))
                 return true;
 
             // otherwise wait for the second task and check if it is true
-            if (finished == icmp && await rdp)
+            if (finished == icmp && await rdp.ConfigureAwait(false))
                 return true;
-            if (finished == rdp && await icmp)
+            if (finished == rdp && await icmp.ConfigureAwait(false))
                 return true;
 
             return false;

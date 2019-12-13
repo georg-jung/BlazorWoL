@@ -22,7 +22,8 @@ namespace WoL.Services
                 await client.ConnectAsync(ip, port).TimeoutAfter(timeout).ConfigureAwait(false);
                 return true;
             }
-            catch
+            catch (Exception ex)
+            when (ex is SocketException || ex is ObjectDisposedException)
             {
                 return false;
             }

@@ -17,6 +17,7 @@ namespace WoL.Data
         {
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Argumente von öffentlichen Methoden validieren", Justification = "Called by the framework, won't be called with null argument")]
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //This will singularize all table names

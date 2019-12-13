@@ -9,7 +9,7 @@ namespace WoL.Extensions
     {
         public static byte[] ParseMacAddress(this string mac)
         {
-            var macString = mac.Replace(":", "-");
+            var macString = mac?.Replace(":", "-", StringComparison.Ordinal) ?? throw new ArgumentNullException(nameof(mac));
             return System.Net.NetworkInformation.PhysicalAddress.Parse(macString).GetAddressBytes();
         }
 
@@ -21,7 +21,7 @@ namespace WoL.Extensions
                 bytes = ParseMacAddress(mac);
                 return true;
             }
-            catch
+            catch (FormatException)
             {
                 return false;
             }

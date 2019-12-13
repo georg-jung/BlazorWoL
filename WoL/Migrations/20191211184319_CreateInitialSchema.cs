@@ -5,6 +5,7 @@ namespace WoL.Migrations
 {
     public partial class CreateInitialSchema : Migration
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Argumente von öffentlichen Methoden validieren", Justification = "Auto-generated and typically called by the framework, won't be called with null")]
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -36,6 +37,7 @@ namespace WoL.Migrations
                 unique: true);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Argumente von öffentlichen Methoden validieren", Justification = "Auto-generated and typically called by the framework, won't be called with null")]
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
