@@ -31,15 +31,55 @@ steps:
     command: 'test'
     arguments: '--configuration Release'
 
+# FDD
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+    arguments: '-c Release --output $(Build.ArtifactStagingDirectory)/fdd'
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)/fdd'
+    artifact: 'fdd'
+
+# Win x86 (x64 just uses more space and ram)
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release -r win-x86 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/win-x86'
+    artifact: 'win-x86'
+  
+# Win ARM (IoT Core / Raspberry PI)
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release -r win-arm /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/win-arm'
+    artifact: 'win-arm'
+  
+# Linux x64
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release -r linux-x64 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/linux-x64'
+    artifact: 'linux-x64'
   
