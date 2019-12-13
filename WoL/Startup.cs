@@ -24,14 +24,32 @@ namespace WoL
 
         public IConfiguration Configuration { get; }
 
+        private void ConfigureDbContext(IServiceCollection services)
+        {
+            var tsql = Configuration.GetConnectionString("TsqlConnection");
+            var sqlite = Configuration.GetConnectionString("SqliteConnection");
+            if (string.IsNullOrEmpty(tsql) && string.IsNullOrEmpty(sqlite))
+                throw new InvalidOperationException("You need to configure either TsqlConnection or SqliteConnection.");
+            if (!string.IsNullOrEmpty(tsql) && !string.IsNullOrEmpty(sqlite))
+                throw new InvalidOperationException("You need to configure either TsqlConnection or SqliteConnection, but not both.");
+
+            if (!string.IsNullOrEmpty(tsql))
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(tsql));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(sqlite));
+            }
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
+            ConfigureDbContext(services);
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddTransient<IHostService, HostService>();
