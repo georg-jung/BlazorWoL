@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,7 +11,7 @@ namespace WoL.Services
 {
     public class RdpPortPingService : DnsPingServiceBase
     {
-        public RdpPortPingService(IAddressLookupService addressLookupService) : base(addressLookupService)
+        public RdpPortPingService(IAddressLookupService addressLookupService, ILoggerFactory loggerFactory) : base(addressLookupService, loggerFactory.CreateLogger<DnsPingServiceBase>())
         {
         }
 

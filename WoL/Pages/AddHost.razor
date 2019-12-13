@@ -5,9 +5,11 @@
 @using WoL.Models.ViewModels
 @using WoL.Services
 @using WoL.Extensions
+@using Microsoft.Extensions.Logging
 @inject IHostService HostService
 @inject IAddressLookupService AddressService
 @inject NavigationManager NavigationManager
+@inject ILogger<AddHost> L
 
 <div class="container">
     <h2>Add Host</h2>
@@ -113,8 +115,9 @@
         {
             host = await GetHost();
         }
-        catch
+        catch (Exception ex)
         {
+            L.LogInformation(ex, $"Exception during name resolution or determination of mac address. Page: {nameof(AddHost)}");
             Alert = "This hostname or it's mac address could not be found.";
             Creating = false;
             return;

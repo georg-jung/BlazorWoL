@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,7 +12,7 @@ namespace WoL.Services
         private readonly RdpPortPingService rdpPing;
         private readonly IcmpPingService icmpPing;
 
-        public CompositePingService(IAddressLookupService addressLookupService, RdpPortPingService rdpPing, IcmpPingService icmpPing) : base(addressLookupService)
+        public CompositePingService(IAddressLookupService addressLookupService, RdpPortPingService rdpPing, IcmpPingService icmpPing, ILoggerFactory loggerFactory) : base(addressLookupService, loggerFactory.CreateLogger<DnsPingServiceBase>())
         {
             this.rdpPing = rdpPing;
             this.icmpPing = icmpPing;
