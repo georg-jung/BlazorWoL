@@ -46,3 +46,7 @@ This application uses the following techniques and might be suitable as a simple
 3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
 
 You can add the application in IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](appsettings.json) for details.
+
+## Known Limitations
+
+* Adding hosts by hostname is currently impossible on linux, as the ARP API is windows specific.
