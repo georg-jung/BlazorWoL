@@ -118,7 +118,7 @@
         catch (DllNotFoundException ex)
         {
             L.LogInformation(ex, $"DllNotFound during name resolution or determination of mac address. Page: {nameof(AddHost)}");
-            Alert = "This operation is not supported on the operating system this application is running on. Adding hosts by hostname is currently not supported on linux due to the lack of an apropriate ARP API.";
+            Alert = "This operation is not supported on the operating system this application is running on. Adding hosts by hostname is currently not supported on linux due to the lack of an appropriate ARP API.";
             Creating = false;
             return;
         }
