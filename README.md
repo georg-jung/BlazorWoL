@@ -4,6 +4,16 @@
 
 This is a [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) app for your network, written in server-side blazor. I developed it for internal use at my workplace and because I wanted to build a small, limited-scope but fully-working and done-right blazor app. [Getting started](#getting-started) is as easy as downloading and running. Feel free to improve/fork/PR this if you think I could have done anything better.
 
+## Download
+
+The platform-specific releases have no prerequisits. Just unpack and double-click. The framework dependend release is smaller and portable but requires [.Net Core 3.1 Runtime to be installed](https://dotnet.microsoft.com/download/dotnet-core).
+
+* [Windows x86](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86.zip)
+  * This app does not take advantage of 64bit, so I chose to deploy x86 due to the smaller footprint.
+* [Windows ARM](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-arm.zip)
+* [Linux x64](https://github.com/georg-jung/BlazorWoL/releases/latest/download/linux-x64.zip)
+* [Framework Dependent (.Net Core 3.1)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip)
+
 ## Features
 
 ![Screenshot](screenshot-01-index.png)
@@ -30,7 +40,7 @@ This application uses the following techniques and might be suitable as a simple
 
 ## Getting Started
 
-1. Download and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/download/WoL.zip).
+1. [Download](#download) and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/).
 2. Run the application by starting `WoL.exe`
 3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
 
