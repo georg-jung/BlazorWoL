@@ -128,6 +128,15 @@
         }
     }
 
+    private string Danger
+    {
+        set
+        {
+            AlertClass = "alert-danger";
+            Alert = value;
+        }
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         await StartBackgroundWork();
@@ -136,6 +145,11 @@
     private async Task StartBackgroundWork()
     {
         host = await HostService.Find(Id);
+        if (host == null)
+        {
+            Danger = "This host does not exist.";
+            return;
+        }
         model = new HostViewModel(host);
         AlertSpinner = true;
         Info = "Sending wake-up packet...";
