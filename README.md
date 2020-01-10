@@ -45,7 +45,7 @@ This application uses the following techniques and might be suitable as a simple
 2. Run the application by starting `WoL.exe`
 3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
 
-You can add the application in IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](appsettings.json) for details.
+You can add the application to IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](WoL/appsettings.json) for details. If you host this in IIS you might want to [configure it to be always running](https://serverfault.com/a/823531), otherwise first the first request after some idle time will take seconds.
 
 ## Known Limitations
 
