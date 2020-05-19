@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace WoL.Services
@@ -12,7 +13,7 @@ namespace WoL.Services
         public async Task<(IPAddress, string)> GetIpAndName(string hostname)
         {
             var res = await Dns.GetHostEntryAsync(hostname).ConfigureAwait(false);
-            return (res.AddressList.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First(), res.HostName);
+            return (res.AddressList.First(ip => ip.AddressFamily == AddressFamily.InterNetwork), res.HostName);
         }
 
         public async Task<PhysicalAddress> GetMac(IPAddress ip)

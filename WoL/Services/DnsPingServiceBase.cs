@@ -13,7 +13,7 @@ namespace WoL.Services
         private readonly IAddressLookupService addressLookupService;
         private readonly ILogger logger;
 
-        public DnsPingServiceBase(IAddressLookupService addressLookupService, ILogger logger)
+        protected DnsPingServiceBase(IAddressLookupService addressLookupService, ILogger logger)
         {
             this.addressLookupService = addressLookupService;
             this.logger = logger;
