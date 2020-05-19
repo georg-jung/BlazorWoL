@@ -58,6 +58,20 @@ steps:
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/win-x86'
     artifact: 'win-x86'
+
+# Win x86 non-single-file for hosting in IIS
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    modifyOutputPath: false
+    publishWebProjects: true
+    arguments: '-c Release -r win-x86 --output $(Build.ArtifactStagingDirectory)/win-x86-iis'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/win-x86-iis'
+    artifact: 'win-x86-iis'
   
 # Win ARM (IoT Core / Raspberry PI)
 
