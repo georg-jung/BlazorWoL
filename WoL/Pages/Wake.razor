@@ -1,4 +1,4 @@
-﻿@page "/Wake/{Id:int}"
+@page "/Wake/{Id:int}"
 
 @using WoL.Data
 @using WoL.Models
@@ -10,88 +10,88 @@
 @inject IWakeService WakeService
 @inject IPingService  PingService
 
-    <div class="container">
-        <h2>Wake</h2>
+<div class="container">
+    <h2>Wake</h2>
 
-        <hr />
+    <hr />
 
-        @if (!string.IsNullOrEmpty(Alert))
-        {
-            <div class="alert @AlertClass">
-                @if (AlertSpinner)
-                {
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                }
-                @Alert
-            </div>
-        }
-
-
-        @if (model != null)
-        {
-            <div class="row">
-                <div class="col-lg-8 col-xl-6">
-                    <dl class="row">
-                        <dt class="col-sm-4">
-                            Title
-                        </dt>
-                        <dd class="col-sm-8">
-                            @model.Caption
-                        </dd>
-                        <dt class="col-sm-4">
-                            Mac Address
-                        </dt>
-                        <dd class="col-sm-8">
-                            @model.MacAddress
-                        </dd>
-                        <dt class="col-sm-4">
-                            Hostname
-                        </dt>
-                        <dd class="col-sm-8">
-                            @model.Hostname
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-
-
-            <h4 class="mt-4">
-                Host Status
-            </h4>
-            @if (IsCheckingStatus)
+    @if (!string.IsNullOrEmpty(Alert))
+    {
+        <div class="alert @AlertClass">
+            @if (AlertSpinner)
             {
-                <span class="spinner-border text-primary mt-2 mb-3" style="font-size: 0.8rem;" role="status" aria-hidden="true"></span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             }
-            <div class="row">
-                <div class="col-lg-8 col-xl-6">
-                    <dl class="row">
-                        <dt class="col-sm-4">
-                            Status
-                        </dt>
-                        <dd class="col-sm-8">
-                            <HostStatus Status="@model.Status" SpinnerIfLoading="false" />
-                        </dd>
-                        <dt class="col-sm-4">
-                            Last Checked
-                        </dt>
-                        <dd class="col-sm-8">
-                            @(LastStatusCheck?.ToString("HH:mm:ss") ?? "-")
-                        </dd>
-                        <dt class="col-sm-4">
-                            Tries Count
-                        </dt>
-                        <dd class="col-sm-8">
-                            @PingTries
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-        }
+            @Alert
+        </div>
+    }
 
-        <a href="">
-            Back to List
-        </a>
-    </div>
+
+    @if (model != null)
+    {
+        <div class="row">
+            <div class="col-lg-8 col-xl-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        Title
+                    </dt>
+                    <dd class="col-sm-8">
+                        @model.Caption
+                    </dd>
+                    <dt class="col-sm-4">
+                        Mac Address
+                    </dt>
+                    <dd class="col-sm-8">
+                        @model.MacAddress
+                    </dd>
+                    <dt class="col-sm-4">
+                        Hostname
+                    </dt>
+                    <dd class="col-sm-8">
+                        @model.Hostname
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+
+        <h4 class="mt-4">
+            Host Status
+        </h4>
+        @if (IsCheckingStatus)
+        {
+            <span class="spinner-border text-primary mt-2 mb-3" style="font-size: 0.8rem;" role="status" aria-hidden="true"></span>
+        }
+        <div class="row">
+            <div class="col-lg-8 col-xl-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        Status
+                    </dt>
+                    <dd class="col-sm-8">
+                        <HostStatus Status="@model.Status" SpinnerIfLoading="false" />
+                    </dd>
+                    <dt class="col-sm-4">
+                        Last Checked
+                    </dt>
+                    <dd class="col-sm-8">
+                        @(LastStatusCheck?.ToString("HH:mm:ss") ?? "-")
+                    </dd>
+                    <dt class="col-sm-4">
+                        Tries Count
+                    </dt>
+                    <dd class="col-sm-8">
+                        @PingTries
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    }
+
+    <a href="">
+        Back to List
+    </a>
+</div>
 
 @code {
     [Parameter]
@@ -170,6 +170,7 @@
                 await Task.Delay(minInterval - msecSince);
             await PingAndSetStatus();
         }
+
         IsCheckingStatus = false;
         base.StateHasChanged();
     }
