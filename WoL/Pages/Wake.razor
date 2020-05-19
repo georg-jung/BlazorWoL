@@ -153,6 +153,7 @@
         model = new HostViewModel(host);
         AlertSpinner = true;
         Info = "Sending wake-up packet...";
+        base.StateHasChanged();
         await WakeService.Wake(host.MacAddress);
         AlertSpinner = false;
         Success = "Wake-up packet sent.";
