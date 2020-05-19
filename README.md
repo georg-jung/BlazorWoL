@@ -10,9 +10,11 @@ The platform-specific releases have no prerequisits. Just unpack and double-clic
 
 * [Windows x86](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86.zip)
   * This app does not take advantage of 64bit, so I chose to deploy x86 due to the smaller footprint.
+* [Windows x86 IIS](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86-iis.zip)
+  * All the linked files except from the *Runtime Dependent* one are self contained. Thus, you don't need to have .Net Core installed. They are published as single file executables too (you get i.e. one ~85mb exe file instead of hudnreds of smaller files). To be able to host a .Net Core application in IIS it must not be published as a single file. So, if you want to host BlazorWoL in IIS, you may choose this download.
 * [Windows ARM](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-arm.zip)
 * [Linux x64](https://github.com/georg-jung/BlazorWoL/releases/latest/download/linux-x64.zip)
-* [Framework Dependent (.Net Core 3.1)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip)
+* [Runtime Dependent (.Net Core 3.1)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip) *previously known as framework dependent*
 
 ## Features
 
