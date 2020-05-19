@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -46,10 +48,22 @@ namespace WoL
             }
         }
 
+        private void ConfigureAppInsights(IServiceCollection services)
+        {
+            var aiStorageFolder = Configuration.GetValue<string>("ApplicationInsightsStorageFolder", null);
+            if (aiStorageFolder != null)
+            {
+                // For Linux OS
+                services.AddSingleton<ITelemetryChannel>(new ServerTelemetryChannel { StorageFolder = aiStorageFolder });
+            }
+            services.AddApplicationInsightsTelemetry();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureAppInsights(services);
             ConfigureDbContext(services);
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -60,7 +74,6 @@ namespace WoL
             services.AddTransient<IPingService, CompositePingService>();
             services.AddTransient<IAddressLookupService, AddressLookupService>();
         }
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Argumente von öffentlichen Methoden validieren", Justification = "Called by the runtime, app will not be null")]
