@@ -6,6 +6,7 @@
 @using WoL.Services
 @using WoL.Extensions
 @using Microsoft.Extensions.Logging
+@using System.Net.Sockets
 @inject IHostService HostService
 @inject IAddressLookupService AddressService
 @inject NavigationManager NavigationManager
@@ -117,14 +118,26 @@
         }
         catch (PlatformNotSupportedException ex)
         {
-            L.LogInformation(ex, $"PlatformNotSupported during name resolution or determination of mac address. Page: {nameof(AddHost)}");
+            L.GetHostPlatformNotSupportedException(ex);
             Alert = "This operation is not supported on the operating system this application is running on. Adding hosts by hostname is currently not supported on Mac OS X due to the lack of an appropriate ARP API.";
+            Creating = false;
+            return;
+        }
+        catch (SocketException sockEx) when (sockEx.ErrorCode == 11001)
+        {
+            // https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2
+            /* WSAHOST_NOT_FOUND
+               Host not found.
+               No such host is known. The name is not an official host name or alias, or it cannot be found in the database(s) being queried. This error may also be returned for protocol and service queries, and means that the specified name could not be found in the relevant database.
+             */
+            L.GetHostHostNotFound(model.Caption, model.Hostname, model.MacAddress, sockEx);
+            Alert = "This hostname could not be found.";
             Creating = false;
             return;
         }
         catch (Exception ex)
         {
-            L.LogDebug(ex, $"Exception during name resolution or determination of mac address. Page: {nameof(AddHost)}");
+            L.GetHostUnknownException(model.Caption, model.Hostname, model.MacAddress, ex);
             Alert = "This hostname or it's mac address could not be found.";
             Creating = false;
             return;
@@ -132,15 +145,18 @@
         try
         {
             await HostService.Add(host);
+            L.HostAdded(host);
         }
         catch (IHostService.DuplicateEntryException duplEx)
         {
+            L.AddHostDuplicateEntryException(host, duplEx);
             Alert = $"Creation failed as an entry with {duplEx.Field.ToLower()} '{duplEx.Value}' does already exists.";
             Creating = false;
             return;
         }
-        catch
+        catch (Exception ex)
         {
+            L.AddHostUnknownException(ex);
             Alert = "This entry could not be created. Maybe a similar entry which shares some of the entered values does already exist. Please contact the administrator.";
             Creating = false;
             return;

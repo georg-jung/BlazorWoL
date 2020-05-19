@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WoL.Extensions;
 
 namespace WoL.Models
 {
@@ -21,5 +22,10 @@ namespace WoL.Models
         [Required]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Eigenschaften dürfen keine Arrays zurückgeben", Justification = "A mac address intrinsically is a byte[]")]
         public byte[] MacAddress { get; set; }
+
+        public override string ToString()
+        {
+            return $"Host(Id = {Id}; Hostname = {Hostname}; MacAddress = {(MacAddress == null ? "null" : this.GetMacString())}; Caption = {Caption})";
+        }
     }
 }

@@ -4,9 +4,11 @@
 @using WoL.Models
 @using WoL.Services
 @using WoL.Extensions
+@using Microsoft.Extensions.Logging
 @inject IHostService HostService
 @inject IAddressLookupService AddressService
 @inject NavigationManager NavigationManager
+@inject ILogger<DeleteHost> L
 
 <div class="container">
     <h2>Delete Host</h2>
@@ -78,6 +80,7 @@
     {
         Deleting = true;
         await HostService.Delete(Id);
+        L.HostDeleted(model);
         NavigationManager.NavigateTo("/");
     }
 }

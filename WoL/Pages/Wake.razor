@@ -1,4 +1,4 @@
-@page "/Wake/{Id:int}"
+﻿@page "/Wake/{Id:int}"
 
 @using WoL.Data
 @using WoL.Models
@@ -6,9 +6,11 @@
 @using WoL.Services
 @using WoL.Extensions
 @using WoL.Components
+@using Microsoft.Extensions.Logging
 @inject IHostService HostService
 @inject IWakeService WakeService
 @inject IPingService  PingService
+@inject ILogger<Wake> L
 
 <div class="container">
     <h2>Wake</h2>
@@ -150,6 +152,7 @@
             Danger = "This host does not exist.";
             return;
         }
+        L.WakeHost(host);
         model = new HostViewModel(host);
         AlertSpinner = true;
         Info = "Sending wake-up packet...";
@@ -171,7 +174,7 @@
                 await Task.Delay(minInterval - msecSince);
             await PingAndSetStatus();
         }
-
+        L.WakeHostFinalStatus(host, PingTries, model.Status);
         IsCheckingStatus = false;
         base.StateHasChanged();
     }
