@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace WoL.Extensions
     {
         public static byte[] ParseMacAddress(this string mac)
         {
-            var macString = mac?.Replace(":", "-", StringComparison.Ordinal)?.ToUpper() ?? throw new ArgumentNullException(nameof(mac));
+            var macString = mac?.Replace(":", "-", StringComparison.Ordinal)?.ToUpper(CultureInfo.InvariantCulture) ?? throw new ArgumentNullException(nameof(mac));
             return System.Net.NetworkInformation.PhysicalAddress.Parse(macString).GetAddressBytes();
         }
 

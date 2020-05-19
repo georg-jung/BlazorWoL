@@ -18,7 +18,7 @@ namespace WoL.Services
             this.icmpPing = icmpPing;
         }
 
-        public async override Task<bool> IsReachable(IPAddress ip, TimeSpan timeout)
+        public override async Task<bool> IsReachable(IPAddress ip, TimeSpan timeout)
         {
             // start pings in parallel
             var rdp = rdpPing.IsReachable(ip, timeout);

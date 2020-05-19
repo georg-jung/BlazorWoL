@@ -68,7 +68,7 @@ namespace WoL.Data
 
         public async Task<Host> Find(int id)
         {
-            return await context.Hosts.FindAsync(id);
+            return await context.Hosts.FindAsync(id).ConfigureAwait(false);
         }
     }
 }
