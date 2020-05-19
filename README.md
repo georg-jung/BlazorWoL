@@ -38,6 +38,8 @@ This application uses the following techniques and might be suitable as a simple
 * Dependency Injection using [`Microsoft.Extensions.DependencyInjection`](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/)
 * Continuous Integration using Azure Pipelines.
 * Dependency updates are partly automated using [Dependabot](https://dependabot.com/).
+* Usage of Microsoft.Extensions.Logging with event ids and custom parameters.
+* Usage of Application Insights to keep track of logged application events in production.
 
 ## Getting Started
 
