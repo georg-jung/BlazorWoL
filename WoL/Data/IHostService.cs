@@ -38,10 +38,18 @@ namespace WoL.Data
             private static string CreateMessage(string field, string value) =>
                 $"A host entry with {field} '{value}' does already exist.";
 
+            private static string CreateMessage(string field) =>
+                $"A host entry with the same {field} does already exist.";
+
             public DuplicateEntryException(string field, string value, string paramName, Exception innerException) : base(CreateMessage(field, value), paramName, innerException)
             {
                 Field = field;
                 Value = value;
+            }
+
+            public DuplicateEntryException(string field, string paramName, Exception innerException) : base(CreateMessage(field), paramName, innerException)
+            {
+                Field = field;
             }
         }
     }
