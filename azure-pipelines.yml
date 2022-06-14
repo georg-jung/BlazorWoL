@@ -24,7 +24,7 @@ steps:
   displayName: Set Version / NBGV
 
 - script: dotnet restore "$(solution)"
-  displayName: dotnet restore -r win-x86 -r win-arm -r linux-x64
+  displayName: dotnet restore
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -52,7 +52,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release --no-restore -r win-x86 --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
+    arguments: '-c Release -r win-x86 --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
 
 - task: PublishPipelineArtifact@1
   inputs:
@@ -66,7 +66,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release --no-restore -r win-x86 --self-contained --output $(Build.ArtifactStagingDirectory)/win-x86-iis'
+    arguments: '-c Release -r win-x86 --self-contained --output $(Build.ArtifactStagingDirectory)/win-x86-iis'
 
 - task: PublishPipelineArtifact@1
   inputs:
@@ -80,7 +80,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release --no-restore -r win-arm --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
+    arguments: '-c Release -r win-arm --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
 
 - task: PublishPipelineArtifact@1
   inputs:
@@ -94,7 +94,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release --no-restore -r linux-x64 --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
+    arguments: '-c Release -r linux-x64 --self-contained /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
 
 - task: PublishPipelineArtifact@1
   inputs:
