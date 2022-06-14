@@ -42,6 +42,7 @@ This application uses the following techniques and might be suitable as a simple
 * Dependency updates are partly automated using [Dependabot](https://dependabot.com/).
 * Usage of Microsoft.Extensions.Logging with event ids and custom parameters.
 * Usage of Application Insights to keep track of logged application events in production.
+* Git height based versioning using [NBGV](https://github.com/dotnet/nerdbank.gitversioning).
 
 ## Getting Started
 
