@@ -10,26 +10,26 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  solution: './WoL.sln'
 
 steps:
-- task: UseDotNet@2
+- task: DotNetCoreCLI@2
   inputs:
-    packageType: 'sdk'
-    version: '3.x'
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+  displayName: Install NBGV tool
 
-- task: NuGetToolInstaller@1
+- script: nbgv cloud -c -a
+  displayName: Set Version / NBGV
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+- script: dotnet restore "$(solution)"
+  displayName: dotnet restore
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    arguments: '--configuration Release'
+    arguments: '-c Release --no-restore'
 
 # FDD
 
@@ -38,7 +38,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release --output $(Build.ArtifactStagingDirectory)/fdd'
+    arguments: '-c Release --no-restore --output $(Build.ArtifactStagingDirectory)/fdd'
 
 - task: PublishPipelineArtifact@1
   inputs:
@@ -52,7 +52,7 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release -r win-x86 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
+    arguments: '-c Release --no-restore -r win-x86 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-x86'
 
 - task: PublishPipelineArtifact@1
   inputs:
@@ -66,13 +66,13 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release -r win-x86 --output $(Build.ArtifactStagingDirectory)/win-x86-iis'
+    arguments: '-c Release --no-restore -r win-x86 --output $(Build.ArtifactStagingDirectory)/win-x86-iis'
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/win-x86-iis'
     artifact: 'win-x86-iis'
-  
+
 # Win ARM (IoT Core / Raspberry PI)
 
 - task: DotNetCoreCLI@2
@@ -80,13 +80,13 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release -r win-arm /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
+    arguments: '-c Release --no-restore -r win-arm /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/win-arm'
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/win-arm'
     artifact: 'win-arm'
-  
+
 # Linux x64
 
 - task: DotNetCoreCLI@2
@@ -94,10 +94,9 @@ steps:
     command: 'publish'
     modifyOutputPath: false
     publishWebProjects: true
-    arguments: '-c Release -r linux-x64 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
+    arguments: '-c Release --no-restore -r linux-x64 /p:PublishSingleFile=true --output $(Build.ArtifactStagingDirectory)/linux-x64'
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/linux-x64'
     artifact: 'linux-x64'
-  
