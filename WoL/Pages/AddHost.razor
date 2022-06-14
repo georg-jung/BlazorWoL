@@ -151,8 +151,8 @@
         {
             L.AddHostDuplicateEntryException(host, duplEx);
             Alert = string.IsNullOrEmpty(duplEx.Value)
-                ? $"Creation failed as an entry with this {duplEx.Field.ToLower()} does already exists."
-                : $"Creation failed as an entry with {duplEx.Field.ToLower()} '{duplEx.Value}' does already exists.";
+                ? $"Creation failed as an entry with this {duplEx.Field.ToLower()} does already exist."
+                : $"Creation failed as an entry with {duplEx.Field.ToLower()} '{duplEx.Value}' does already exist.";
             Creating = false;
             return;
         }
