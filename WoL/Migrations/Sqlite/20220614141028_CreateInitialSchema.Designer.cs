@@ -2,58 +2,52 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WoL.Data;
 
 #nullable disable
 
-namespace WoL.Migrations
+namespace WoL.Migrations.Sqlite
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SqliteDbContext))]
+    [Migration("20220614141028_CreateInitialSchema")]
+    partial class CreateInitialSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
             modelBuilder.Entity("WoL.Models.Host", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Caption")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Hostname")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("MacAddress")
                         .IsRequired()
                         .HasMaxLength(6)
-                        .HasColumnType("varbinary(6)");
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Hostname")
-                        .IsUnique()
-                        .HasFilter("[Hostname] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("MacAddress")
                         .IsUnique();
 
-                    b.ToTable("Host", (string)null);
+                    b.ToTable("Host");
                 });
 #pragma warning restore 612, 618
         }

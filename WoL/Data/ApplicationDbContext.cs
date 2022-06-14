@@ -12,7 +12,7 @@ namespace WoL.Data
     {
         public DbSet<Host> Hosts { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions options)
                 : base(options)
         {
         }

@@ -38,13 +38,19 @@ namespace WoL
 
             if (!string.IsNullOrEmpty(tsql))
             {
-                services.AddDbContextFactory<ApplicationDbContext>(options =>
+                services.AddDbContextFactory<SqlServerDbContext>(options =>
                     options.UseSqlServer(tsql));
+                services.AddSingleton<CovariantDbContextFactory<ApplicationDbContext, SqlServerDbContext>>();
+                services.AddSingleton<IDbContextFactory<ApplicationDbContext>>(
+                    sp => sp.GetRequiredService<CovariantDbContextFactory<ApplicationDbContext, SqlServerDbContext>>());
             }
             else
             {
-                services.AddDbContextFactory<ApplicationDbContext>(options =>
+                services.AddDbContextFactory<SqliteDbContext>(options =>
                     options.UseSqlite(sqlite));
+                services.AddSingleton<CovariantDbContextFactory<ApplicationDbContext, SqliteDbContext>>();
+                services.AddSingleton<IDbContextFactory<ApplicationDbContext>>(
+                    sp => sp.GetRequiredService<CovariantDbContextFactory<ApplicationDbContext, SqliteDbContext>>());
             }
         }
 
