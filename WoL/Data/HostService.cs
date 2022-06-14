@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,6 @@ namespace WoL.Data
 {
     public class HostService : IHostService
     {
-        private readonly ApplicationDbContext context;
-        
         private static readonly Regex tsqlParseDuplicateValue = new Regex(@"The duplicate key value is \(([^)]+)\)");
         private static readonly Regex tsqlParseIndexName = new Regex(@"with unique index '([^']+)'\.");
         // this makes assumptions about the names of the indices which is kind of bad
@@ -22,22 +20,26 @@ namespace WoL.Data
 
         private static readonly Regex sqliteParseParseIdxField = new Regex(@"UNIQUE constraint failed: ([^']+)");
 
-        public HostService(ApplicationDbContext context)
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+
+        public HostService(IDbContextFactory<ApplicationDbContext> contextFactory)
         {
-            this.context = context;
+            _contextFactory = contextFactory;
         }
 
-        public Task<List<Host>> GetAll()
+        public async Task<List<Host>> GetAll()
         {
-            return context.Hosts.ToListAsync();
+            using var ctx = _contextFactory.CreateDbContext();
+            return await ctx.Hosts.AsNoTracking().ToListAsync().ConfigureAwait(false);
         }
 
         public async Task Add(Host host)
         {
+            using var ctx = _contextFactory.CreateDbContext();
             try
             {
-                await context.Hosts.AddAsync(host).ConfigureAwait(false);
-                await context.SaveChangesAsync().ConfigureAwait(false);
+                await ctx.Hosts.AddAsync(host).ConfigureAwait(false);
+                await ctx.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateException dbue)
                 // handle tsql
@@ -46,9 +48,6 @@ namespace WoL.Data
                 when (dbue.InnerException is SqlException sqlEx &&
                       (sqlEx.Number == 2601 || sqlEx.Number == 2627))
             {
-                // otherwise this host would be added again when further using the same DbContext
-                context.Entry(host).State = EntityState.Detached;
-
                 var msg = sqlEx.Message;
                 var duplVal = tsqlParseDuplicateValue.Match(msg).Groups[1].Value;
                 var idxName = tsqlParseIndexName.Match(msg).Groups[1].Value;
@@ -62,39 +61,25 @@ namespace WoL.Data
                 when (dbue.InnerException is SqliteException sqlEx &&
                       (sqlEx.SqliteErrorCode == 19 || sqlEx.SqliteExtendedErrorCode == 2067))
             {
-                // otherwise this host would be added again when further using the same DbContext
-                context.Entry(host).State = EntityState.Detached;
-
-                var msg = sqlEx.Message;
-                var fieldName = sqliteParseParseIdxField.Match(msg).Groups[1].Value;
+                var fieldName = m.Groups[1].Value;
                 if (fieldName.StartsWith("host.", StringComparison.OrdinalIgnoreCase))
                     fieldName = fieldName.Substring(5);
                 throw new IHostService.DuplicateEntryException(fieldName, nameof(host), dbue);
             }
-            catch
-            {
-                // otherwise this host would be added again when further using the same DbContext
-                context.Entry(host).State = EntityState.Detached;
-                throw;
-            }
-        }
-
-        public async Task Update(Host host)
-        {
-            context.Hosts.Update(host);
-            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task Delete(int id)
         {
-            var host = await context.Hosts.FindAsync(id).ConfigureAwait(false);
-            context.Hosts.Remove(host);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            using var ctx = _contextFactory.CreateDbContext();
+            var host = await ctx.Hosts.FindAsync(id).ConfigureAwait(false);
+            ctx.Hosts.Remove(host);
+            await ctx.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task<Host> Find(int id)
         {
-            return await context.Hosts.FindAsync(id).ConfigureAwait(false);
+            using var ctx = _contextFactory.CreateDbContext();
+            return await ctx.Hosts.AsNoTracking().FirstAsync(h => h.Id == id).ConfigureAwait(false);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace WoL.Data
         Task Delete(int id);
         Task<Host> Find(int id);
         Task<List<Host>> GetAll();
-        Task Update(Host host);
 
         public class DuplicateEntryException : ArgumentException
         {

@@ -38,12 +38,12 @@ namespace WoL
 
             if (!string.IsNullOrEmpty(tsql))
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContextFactory<ApplicationDbContext>(options =>
                     options.UseSqlServer(tsql));
             }
             else
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContextFactory<ApplicationDbContext>(options =>
                     options.UseSqlite(sqlite));
             }
         }
@@ -112,7 +112,8 @@ namespace WoL
             using var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope();
-            using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            var fac = serviceScope.ServiceProvider.GetService<IDbContextFactory<ApplicationDbContext>>();
+            using var context = fac.CreateDbContext();
             // this could be async but configuration of the dependencies isn't
             // https://stackoverflow.com/a/37573402/1200847
             context.Database.Migrate();
