@@ -1,0 +1,16 @@
+name: CI Build
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+
+permissions:
+  contents: read
+
+jobs:
+  docker-build:
+    uses: ./.github/workflows/docker-build-and-push.yml
+    with:
+      dockerfile: ./Dockerfile
+      push: false
