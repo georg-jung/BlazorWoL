@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -59,7 +59,9 @@ namespace WoL.Data
                 // see https://sqlite.org/rescode.html
                 // i.e. "SQLite Error 19: 'UNIQUE constraint failed: Host.MacAddress'."
                 when (dbue.InnerException is SqliteException sqlEx &&
-                      (sqlEx.SqliteErrorCode == 19 || sqlEx.SqliteExtendedErrorCode == 2067))
+                      (sqlEx.SqliteErrorCode == 19 || sqlEx.SqliteExtendedErrorCode == 2067) &&
+                      sqliteParseParseIdxField.Match(sqlEx.Message) is Match m &&
+                      m.Success)
             {
                 var fieldName = m.Groups[1].Value;
                 if (fieldName.StartsWith("host.", StringComparison.OrdinalIgnoreCase))
