@@ -24,7 +24,7 @@ steps:
   displayName: Set Version / NBGV
 
 - script: dotnet restore "$(solution)"
-  displayName: dotnet restore
+  displayName: dotnet restore -r win-x86 -r win-arm -r linux-x64
 
 - task: DotNetCoreCLI@2
   inputs:
