@@ -1,6 +1,6 @@
 # Blazor Wake-on-LAN
 
-[![Build Status](https://dev.azure.com/georg-jung/BlazorWoL/_apis/build/status/georg-jung.BlazorWoL?branchName=master)](https://dev.azure.com/georg-jung/BlazorWoL/_build/latest?definitionId=1&branchName=master)
+[![CI](https://github.com/georg-jung/BlazorWoL/actions/workflows/ci.yml/badge.svg)](https://github.com/georg-jung/BlazorWoL/actions/workflows/ci.yml)
 
 This is a [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) app for your network, written in server-side blazor. I developed it for internal use at my workplace and because I wanted to build a small, limited-scope but fully-working and done-right blazor app. [Getting started](#getting-started) is as easy as downloading and running. Feel free to improve/fork/PR this if you think I could have done anything better.
 
@@ -38,7 +38,9 @@ This application uses the following techniques and might be suitable as a simple
   * Automatic Migrations
   * Supports T-SQL and SQLite, selection by connection string in `appsettings.json`
 * Dependency Injection using [`Microsoft.Extensions.DependencyInjection`](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/)
-* Continuous Integration using Azure Pipelines.
+* Continuous Integration and Continuous Deployment using GitHub Actions.
+  * Docker image creation and push
+  * Zipped executables in GitHub Release
 * Dependency updates are partly automated using [Dependabot](https://dependabot.com/).
 * Usage of Microsoft.Extensions.Logging with event ids and custom parameters.
 * Usage of Application Insights to keep track of logged application events in production.
