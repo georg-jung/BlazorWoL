@@ -1,7 +1,9 @@
-name: CI Build
+name: CI
 
 on:
   push:
+    branches-ignore:
+      - 'release/v**'
     paths-ignore:
       - '**.md'
 
@@ -14,3 +16,5 @@ jobs:
     with:
       dockerfile: ./Dockerfile
       push: false
+  standalone-build:
+    uses: ./.github/workflows/standalone-build.yml

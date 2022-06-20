@@ -1,0 +1,39 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - 'release/v**'
+    paths-ignore:
+      - '**.md'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker-build:
+    uses: ./.github/workflows/docker-build-and-push.yml
+    with:
+      dockerfile: ./Dockerfile
+      push: true
+  standalone-build:
+    uses: ./.github/workflows/standalone-build.yml
+  create-github-release:
+    runs-on: ubuntu-latest
+    needs: [docker-build, standalone-build]
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        path: artifacts
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+    - uses: dotnet/nbgv@v0.4.0
+      id: nbgv
+    - uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.nbgv.outputs.SemVer2 }}
+        draft: true
+        prerelease: false
+        files: artifacts/*
