@@ -15,7 +15,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: blazor-wol # ${{ github.repository }} would be BlazorWoL
+  IMAGE_NAME: georg-jung/blazorwol # ${{ github.repository }} would be georg-jung/BlazorWoL
 
 jobs:
   build-and-push:
