@@ -33,11 +33,11 @@ jobs:
         path: artifacts
     - name: ZIP artifacts
       run: |
-        7z a artifacts/fdd.zip artifacts/fdd/*
-        7z a artifacts/win-x86.zip artifacts/win-x86/*
-        7z a artifacts/win-x86-iis.zip artifacts/win-x86-iis/*
-        7z a artifacts/win-arm.zip artifacts/win-arm/*
-        7z a artifacts/linux-x64.zip artifacts/linux-x64/*
+        7z a artifacts/fdd.zip ./artifacts/fdd/*
+        7z a artifacts/win-x86.zip ./artifacts/win-x86/*
+        7z a artifacts/win-x86-iis.zip ./artifacts/win-x86-iis/*
+        7z a artifacts/win-arm.zip ./artifacts/win-arm/*
+        7z a artifacts/linux-x64.zip ./artifacts/linux-x64/*
     - uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.nbgv.outputs.SemVer2 }}
