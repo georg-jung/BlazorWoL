@@ -44,3 +44,4 @@ jobs:
         draft: true
         prerelease: false
         files: artifacts/*.zip
+        target_commitish: ${{ github.ref }}
