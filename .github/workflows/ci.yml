@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches-ignore:
+      - 'release/v**'
     paths-ignore:
       - '**.md'
 
@@ -9,7 +11,10 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  docker-build:
+    uses: ./.github/workflows/docker-build-and-push.yml
     with:
-      release: false
+      dockerfile: ./Dockerfile
+      push: false
+  standalone-build:
+    uses: ./.github/workflows/standalone-build.yml
