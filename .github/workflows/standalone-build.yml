@@ -1,0 +1,32 @@
+name: Standalone Build
+
+on:
+  workflow_call
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - args: ''
+            name: fdd
+          - args: '-r win-x86 --self-contained /p:PublishSingleFile=true'
+            name: win-x86
+          - args: '-r win-x86 --self-contained'
+            name: win-x86-iis
+          - args: '-r win-arm --self-contained /p:PublishSingleFile=true'
+            name: win-arm
+          - args: '-r linux-x64 --self-contained /p:PublishSingleFile=true'
+            name: linux-x64
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+    - name: Publish
+      run: dotnet publish -c Release ${{ matrix.args }} --output bin/${{ matrix.name }}
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.name }}
+        path: bin/${{ matrix.name }}/

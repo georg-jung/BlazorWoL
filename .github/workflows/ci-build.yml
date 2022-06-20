@@ -14,3 +14,5 @@ jobs:
     with:
       dockerfile: ./Dockerfile
       push: false
+  standalone-build:
+    uses: ./.github/workflows/standalone-build.yml
