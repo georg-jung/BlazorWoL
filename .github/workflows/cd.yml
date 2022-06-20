@@ -8,7 +8,7 @@ on:
       - '**.md'
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -23,17 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docker-build, standalone-build]
     steps:
-    - uses: actions/download-artifact@v3
-      with:
-        path: artifacts
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
     - uses: dotnet/nbgv@v0.4.0
       id: nbgv
+    - uses: actions/download-artifact@v3
+      with:
+        path: artifacts
+    - name: ZIP artifacts
+      run: |
+        7z a artifacts/fdd.zip ./artifacts/fdd/*
+        7z a artifacts/win-x86.zip ./artifacts/win-x86/*
+        7z a artifacts/win-x86-iis.zip ./artifacts/win-x86-iis/*
+        7z a artifacts/win-arm.zip ./artifacts/win-arm/*
+        7z a artifacts/linux-x64.zip ./artifacts/linux-x64/*
     - uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.nbgv.outputs.SemVer2 }}
         draft: true
         prerelease: false
-        files: artifacts/*
+        files: artifacts/*.zip
