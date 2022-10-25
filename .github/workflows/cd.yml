@@ -26,7 +26,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
-    - uses: dotnet/nbgv@v0.4.0
+    - uses: dotnet/nbgv@v0.4
       id: nbgv
     - uses: actions/download-artifact@v3
       with:
