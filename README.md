@@ -26,7 +26,7 @@ You can add the application to IIS for more serious hosting. You can set up T-SQ
 
 ## Download
 
-The platform-specific releases have no prerequisits. Just unpack and double-click. The framework dependend release is smaller and portable but requires [.Net 6 Runtime to be installed](https://dotnet.microsoft.com/download/dotnet-core).
+The platform-specific releases have no prerequisits. Just unpack and double-click. The framework dependend release is smaller and portable but requires [.Net 7 Runtime to be installed](https://dotnet.microsoft.com/download/dotnet-core).
 
 * [Windows x86](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86.zip)
   * This app does not take advantage of 64bit, so I chose to deploy x86 due to the smaller footprint.
@@ -34,7 +34,7 @@ The platform-specific releases have no prerequisits. Just unpack and double-clic
   * All files listed here except from the *Runtime Dependent* one are self contained. Thus, you don't need to have the .Net runtime installed. They are published as single file executables too (you get one ~85mb exe file instead of hundreds of smaller files). To be able to host a .Net application in IIS it must not be published as a single file. So, if you want to host BlazorWoL in IIS, you may choose this download.
 * [Windows ARM](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-arm.zip)
 * [Linux x64](https://github.com/georg-jung/BlazorWoL/releases/latest/download/linux-x64.zip)
-* [Runtime Dependent (.Net 6.0)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip) *previously known as framework dependent*
+* [Runtime Dependent (.Net 7.0)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip) *previously known as framework dependent*
 
 ## Features
 
@@ -53,7 +53,7 @@ This application uses the following techniques and might be suitable as a simple
 * [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
   * Components and Pages in Razor
   * UI-Server-interaction which would typically require AJAX/writing JavaScript. See the `Wake` page and the *Status* column of the index page.
-* .Net 6
+* .Net 7
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) Code First
   * Automatic Migrations
   * Supports T-SQL and SQLite, selection by connection string in `appsettings.json`
