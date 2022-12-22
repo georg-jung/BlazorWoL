@@ -4,6 +4,26 @@
 
 This is a [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) app for your network, written in server-side blazor. I developed it for internal use at my workplace and because I wanted to build a small, limited-scope but fully-working and done-right blazor app. [Getting started](#getting-started) is as easy as downloading and running. Feel free to improve/fork/PR this if you think I could have done anything better.
 
+## Getting Started
+
+### With Docker
+
+You can start a BlazorWoL docker container like this:
+
+```bash
+docker run -e "ConnectionStrings__SqliteConnection=Data Source=/blazorwol/db.sqlite" -v /var/blazorwol:/blazorwol --network host --name blazorwol ghcr.io/georg-jung/blazorwol:latest
+```
+
+Please note that this does not work on Windows, even with WSL, as docker host networking is required.
+
+### By downloading binaries
+
+1. [Download](#download) and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/).
+2. Run the application by starting `WoL.exe`
+3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
+
+You can add the application to IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](WoL/appsettings.json) for details. If you host this in IIS you might want to [configure it to be always running](https://serverfault.com/a/823531), otherwise the first request after some idle time will take seconds.
+
 ## Download
 
 The platform-specific releases have no prerequisits. Just unpack and double-click. The framework dependend release is smaller and portable but requires [.Net 6 Runtime to be installed](https://dotnet.microsoft.com/download/dotnet-core).
@@ -11,7 +31,7 @@ The platform-specific releases have no prerequisits. Just unpack and double-clic
 * [Windows x86](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86.zip)
   * This app does not take advantage of 64bit, so I chose to deploy x86 due to the smaller footprint.
 * [Windows x86 IIS](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-x86-iis.zip)
-  * All the linked files except from the *Runtime Dependent* one are self contained. Thus, you don't need to have .Net Core installed. They are published as single file executables too (you get i.e. one ~85mb exe file instead of hudnreds of smaller files). To be able to host a .Net Core application in IIS it must not be published as a single file. So, if you want to host BlazorWoL in IIS, you may choose this download.
+  * All files listed here except from the *Runtime Dependent* one are self contained. Thus, you don't need to have the .Net runtime installed. They are published as single file executables too (you get one ~85mb exe file instead of hundreds of smaller files). To be able to host a .Net application in IIS it must not be published as a single file. So, if you want to host BlazorWoL in IIS, you may choose this download.
 * [Windows ARM](https://github.com/georg-jung/BlazorWoL/releases/latest/download/win-arm.zip)
 * [Linux x64](https://github.com/georg-jung/BlazorWoL/releases/latest/download/linux-x64.zip)
 * [Runtime Dependent (.Net 6.0)](https://github.com/georg-jung/BlazorWoL/releases/latest/download/fdd.zip) *previously known as framework dependent*
@@ -45,14 +65,6 @@ This application uses the following techniques and might be suitable as a simple
 * Usage of Microsoft.Extensions.Logging with event ids and custom parameters.
 * Usage of Application Insights to keep track of logged application events in production.
 * Git height based versioning using [NBGV](https://github.com/dotnet/nerdbank.gitversioning).
-
-## Getting Started
-
-1. [Download](#download) and unzip the [latest release](https://github.com/georg-jung/BlazorWoL/releases/latest/).
-2. Run the application by starting `WoL.exe`
-3. Open the shown location in a browser (probably `localhost:5000`) and add your first host.
-
-You can add the application to IIS for more serious hosting. You can set up T-SQL as a backend for backup etc.. See the [`appsettings.json` file](WoL/appsettings.json) for details. If you host this in IIS you might want to [configure it to be always running](https://serverfault.com/a/823531), otherwise the first request after some idle time will take seconds.
 
 ## Known Limitations
 
