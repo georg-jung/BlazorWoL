@@ -38,7 +38,6 @@ app {
 
         .main .top-row > a, .main .top-row .btn-link {
             white-space: nowrap;
-            margin-left: 1.5rem;
         }
 
 .main .top-row a:first-child {
