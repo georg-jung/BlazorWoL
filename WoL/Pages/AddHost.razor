@@ -123,22 +123,25 @@
             Creating = false;
             return;
         }
-        catch (SocketException sockEx) when (sockEx.ErrorCode == 11001)
+        catch (SocketException sockEx) when (sockEx.SocketErrorCode == SocketError.HostNotFound)
         {
+            // https://blog.jetbrains.com/dotnet/2020/04/27/socket-error-codes-depend-runtime-operating-system/
+            // For cross platform socket error handling
+
             // https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2
             /* WSAHOST_NOT_FOUND
                Host not found.
                No such host is known. The name is not an official host name or alias, or it cannot be found in the database(s) being queried. This error may also be returned for protocol and service queries, and means that the specified name could not be found in the relevant database.
              */
             L.GetHostHostNotFound(model.Caption, model.Hostname, model.MacAddress, sockEx);
-            Alert = "This hostname could not be found.";
+            Alert = "This host could not be found.";
             Creating = false;
             return;
         }
         catch (Exception ex)
         {
             L.GetHostUnknownException(model.Caption, model.Hostname, model.MacAddress, ex);
-            Alert = "This hostname or it's mac address could not be found.";
+            Alert = "This host or it's mac address could not be found.";
             Creating = false;
             return;
         }
