@@ -25,7 +25,7 @@ jobs:
         uses: georg-jung/docker-image-update-checker@main
         with:
           base-image: ${{ env.BASE_IMAGE }}
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          image: ${{ env.IMAGE_NAME }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           verbose: true
       - name: get latest release with tag
