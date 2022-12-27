@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ghcr.io/georg-jung/blazorwol:latest
   BASE_IMAGE: mcr.microsoft.com/dotnet/aspnet:7.0
 
 jobs:
