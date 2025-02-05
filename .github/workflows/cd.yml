@@ -23,12 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docker-build, standalone-build]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
     - uses: dotnet/nbgv@v0.4
       id: nbgv
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         path: artifacts
     - name: ZIP artifacts

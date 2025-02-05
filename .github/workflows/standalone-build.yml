@@ -20,13 +20,13 @@ jobs:
           - args: '-r linux-x64 --self-contained /p:PublishSingleFile=true'
             name: linux-x64
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
     - name: Publish
       run: dotnet publish -c Release ${{ matrix.args }} /p:ContinuousIntegrationBuild=true --output bin/${{ matrix.name }}
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.name }}
         path: bin/${{ matrix.name }}/
