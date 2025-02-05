@@ -15,8 +15,6 @@ jobs:
             name: win-x86
           - args: '-r win-x86 --self-contained'
             name: win-x86-iis
-          - args: '-r win-arm --self-contained /p:PublishSingleFile=true'
-            name: win-arm
           - args: '-r linux-x64 --self-contained /p:PublishSingleFile=true'
             name: linux-x64
     steps:

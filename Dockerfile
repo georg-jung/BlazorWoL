@@ -7,8 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["WoL.sln", "./"]
-COPY ["Directory.Build.props", "./"]
+COPY ["WoL.sln", "Directory.Build.props", "Directory.Packages.props", "./"]
 COPY ["WoL/WoL.csproj", "./WoL/"]
 RUN dotnet restore "WoL.sln"
 COPY . .
