@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WoL.Models;
 
@@ -27,10 +26,6 @@ namespace WoL.Data
             }
 
             public DuplicateEntryException(string message, Exception innerException) : base(message, innerException)
-            {
-            }
-
-            protected DuplicateEntryException(SerializationInfo info, StreamingContext context) : base(info, context)
             {
             }
 
