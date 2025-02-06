@@ -37,7 +37,7 @@ jobs:
         7z a artifacts/win-x86.zip ./artifacts/win-x86/*
         7z a artifacts/win-x86-iis.zip ./artifacts/win-x86-iis/*
         7z a artifacts/linux-x64.zip ./artifacts/linux-x64/*
-    - uses: softprops/action-gh-release@v1
+    - uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ steps.nbgv.outputs.SemVer2 }}
         draft: true
