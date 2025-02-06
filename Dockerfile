@@ -5,7 +5,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["WoL.sln", "Directory.Build.props", "Directory.Packages.props", "./"]
 COPY ["WoL/WoL.csproj", "./WoL/"]
