@@ -11,7 +11,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" PrivateAssets="all" />
     <PackageVersion Include="WakeOnLAN" Version="2.0.2" />
   </ItemGroup>
